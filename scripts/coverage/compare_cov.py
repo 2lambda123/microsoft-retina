@@ -220,7 +220,7 @@ print(body_of_comment)
 # check if the PR is raised by depandabot, if yes ignore posting a comment on the PR
 issue_url = f"https://api.github.com/repos/{owner}/{repo}/issues/{pr_num}"
 # Make the API call to get the comments on the pull request
-issue_response = requests.get(issue_url, headers=headers)
+issue_response = requests.get(issue_url, headers=headers, timeout=60)
 if issue_response.status_code != 200:
     print(
         f"Failed to get PR with url {issue_url}", issue_response.content)
@@ -238,7 +238,7 @@ if issues_data["user"]["login"] == "dependabot[bot]":
 comments_url = f"https://api.github.com/repos/{owner}/{repo}/issues/{pr_num}/comments"
 
 # Make the API call to get the comments on the pull request
-comments_response = requests.get(comments_url, headers=headers)
+comments_response = requests.get(comments_url, headers=headers, timeout=60)
 if comments_response.status_code != 200:
     print(
         f"Failed to get comments of the PR with url {comments_url}", comments_response.content)
@@ -265,7 +265,7 @@ if existing_comment:
     }
 
     # Make the API call to update the comment
-    update_response = requests.patch(update_url, headers=headers, json=payload)
+    update_response = requests.patch(update_url, headers=headers, json=payload, timeout=60)
     if update_response.status_code != 200:
         print(
             f"Failed to update the comment with url {update_url}", update_response.content)
@@ -282,7 +282,7 @@ else:
     }
 
     # Make the API call to add the new comment
-    add_response = requests.post(comments_url, headers=headers, json=payload)
+    add_response = requests.post(comments_url, headers=headers, json=payload, timeout=60)
     if add_response.status_code != 201:
         print(
             f"Failed to add the comment with url {comments_url}", add_response.content)
