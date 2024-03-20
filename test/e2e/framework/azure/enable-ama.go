@@ -24,7 +24,7 @@ type CreateAzureMonitor struct {
 }
 
 func (c *CreateAzureMonitor) Run() error {
-	log.Printf(`this will deploy azure monitor workspace and grafana, but as of 1/9/2024, the api docs don't show how to do 
+	log.Printf(`this will deploy azure monitor workspace and grafana, but as of 1/9/2024, the api docs don't show how to do
 az aks update --enable-azure-monitor-metrics \
 -n $NAME \
 -g $CLUSTER_RESOURCE_GROUP \

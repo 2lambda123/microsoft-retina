@@ -55,13 +55,13 @@ qemu-user-static: ## Set up the host to run qemu multiplatform container builds.
 version: ## prints the root version
 	@echo $(TAG)
 
-##@ Help 
+##@ Help
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 
-##@ Tools 
+##@ Tools
 
 TOOLS_DIR     = $(REPO_ROOT)/hack/tools
 TOOLS_BIN_DIR = $(TOOLS_DIR)/bin
@@ -71,7 +71,7 @@ CONTROLLER_GEN := $(TOOLS_BIN_DIR)/controller-gen
 GINKGO 		  := $(TOOLS_BIN_DIR)/ginkgo
 MOCKGEN         := $(TOOLS_BIN_DIR)/mockgen
 ENVTEST         := $(TOOLS_BIN_DIR)/setup-envtest
-GIT_CURRENT_BRANCH_NAME := $(shell git rev-parse --abbrev-ref HEAD) 
+GIT_CURRENT_BRANCH_NAME := $(shell git rev-parse --abbrev-ref HEAD)
 
 $(TOOLS_DIR)/go.mod:
 	cd $(TOOLS_DIR); go mod init && go mod tidy
@@ -118,10 +118,10 @@ generate-bpf-go: ## generate ebpf wrappers for plugins for all archs
 	for arch in $(ALL_ARCH.linux); do \
         CGO_ENABLED=0 GOARCH=$$arch go generate ./pkg/plugin/...; \
     done
-	
+
 .PHONY: all generate generate-bpf-go
 
-##@ Utils 
+##@ Utils
 
 FMT_PKG  ?= .
 LINT_PKG ?= .
@@ -205,7 +205,7 @@ skopeo-export: # util target to copy a container from containers-storage to the 
 	skopeo copy \
 		containers-storage:$(REF) \
 		docker-daemon:$(REF)
-		
+
 
 container-push: # util target to publish container image. do not invoke directly.
 	$(CONTAINER_BUILDER) push \
@@ -215,7 +215,7 @@ container-pull: # util target to pull container image.
 	$(CONTAINER_BUILDER) pull \
 		$(IMAGE_REGISTRY)/$(IMAGE):$(TAG)
 
-retina-skopeo-export: 
+retina-skopeo-export:
 	$(MAKE) skopeo-export \
 		REF=$(IMAGE_REGISTRY)/$(RETINA_IMAGE):$(RETINA_PLATFORM_TAG) \
 		IMG=$(RETINA_IMAGE)
@@ -297,7 +297,7 @@ retina-operator-image:  ## build the retina linux operator image.
 			CONTEXT_DIR=$(REPO_ROOT) \
 			ACTION=--push
 
-kubectl-retina-image: ## build the kubectl-retina image. 
+kubectl-retina-image: ## build the kubectl-retina image.
 	echo "Building for $(PLATFORM)"
 	$(MAKE) container-$(CONTAINER_BUILDER) \
 			PLATFORM=$(PLATFORM) \
@@ -357,7 +357,7 @@ manifest:
 
 ##@ Tests
 # Make sure the layer has only one directory.
-# the test DockerFile needs to build the scratch stage with all the output files 
+# the test DockerFile needs to build the scratch stage with all the output files
 # and we will untar the archive and copy the files from scratch stage
 test-image: ## build the retina container image for testing.
 	$(MAKE) container-docker \
@@ -392,7 +392,7 @@ coverage: # Code coverage.
 ## Reusable targets for building multiplat container image manifests.
 
 .PHONY: manifests
-manifests: 
+manifests:
 	cd crd && make manifests && make generate
 
 HELM_IMAGE_TAG ?= v0.0.1
@@ -453,7 +453,7 @@ helm-uninstall:
 	helm uninstall retina -n kube-system
 
 .PHONY: docs
-docs: 
+docs:
 	echo $(PWD)
 	docker run -it -p 3000:3000 -v $(PWD):/retina -w /retina/ node:20-alpine ./site/start-dev.sh
 
