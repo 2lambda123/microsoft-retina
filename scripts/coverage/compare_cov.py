@@ -1,6 +1,7 @@
 import requests
 import os
 import json
+from security import safe_requests
 
 # Set up authentication credentials
 token = os.environ.get("GITHUB_TOKEN")
@@ -220,7 +221,7 @@ print(body_of_comment)
 # check if the PR is raised by depandabot, if yes ignore posting a comment on the PR
 issue_url = f"https://api.github.com/repos/{owner}/{repo}/issues/{pr_num}"
 # Make the API call to get the comments on the pull request
-issue_response = requests.get(issue_url, headers=headers, timeout=60)
+issue_response = safe_requests.get(issue_url, headers=headers, timeout=60)
 if issue_response.status_code != 200:
     print(
         f"Failed to get PR with url {issue_url}", issue_response.content)
@@ -238,7 +239,7 @@ if issues_data["user"]["login"] == "dependabot[bot]":
 comments_url = f"https://api.github.com/repos/{owner}/{repo}/issues/{pr_num}/comments"
 
 # Make the API call to get the comments on the pull request
-comments_response = requests.get(comments_url, headers=headers, timeout=60)
+comments_response = safe_requests.get(comments_url, headers=headers, timeout=60)
 if comments_response.status_code != 200:
     print(
         f"Failed to get comments of the PR with url {comments_url}", comments_response.content)
